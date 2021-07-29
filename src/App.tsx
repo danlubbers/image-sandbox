@@ -1,5 +1,5 @@
 import "./App.css";
-import imageData from "./json/image-content";
+import imageData from "./json/image-content.json";
 import ImageSlider from "./components/ImageSlider";
 
 function App() {

@@ -1,7 +1,14 @@
-import React, { useState } from "react";
+import { KeyboardEvent, useState } from "react";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 
-const ImageSlider = ({ sliderData, isRightKey }) => {
+interface ImageData {
+  sliderData: {
+    name: string;
+    imgSrc: string;
+  }[];
+}
+
+const ImageSlider: React.FC<ImageData> = ({ sliderData }) => {
   const [current, setCurrent] = useState(0);
   const length = sliderData.length;
 
@@ -14,7 +21,9 @@ const ImageSlider = ({ sliderData, isRightKey }) => {
     setCurrent(current === 0 ? length - 1 : current - 1);
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (
+    e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     if (e.key === "ArrowRight") {
       setCurrent(current === length - 1 ? 0 : current + 1);
     }
