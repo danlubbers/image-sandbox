@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
 
-const ImageSlider = ({ sliderData }) => {
+const ImageSlider = ({ sliderData, isRightKey }) => {
   const [current, setCurrent] = useState(0);
   const length = sliderData.length;
-  console.log(sliderData);
 
   if (!Array.isArray(sliderData) || sliderData.length <= 0) return null;
 
@@ -13,6 +12,15 @@ const ImageSlider = ({ sliderData }) => {
   };
   const prevSlide = () => {
     setCurrent(current === 0 ? length - 1 : current - 1);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "ArrowRight") {
+      setCurrent(current === length - 1 ? 0 : current + 1);
+    }
+    if (e.key === "ArrowLeft") {
+      setCurrent(current === 0 ? length - 1 : current - 1);
+    }
   };
 
   const imageSliderData = sliderData.map((detail, idx) => {
@@ -25,7 +33,7 @@ const ImageSlider = ({ sliderData }) => {
     );
   });
   return (
-    <section className="slider">
+    <section className="slider" onKeyDown={handleKeyPress} tabIndex="0">
       <FaArrowAltCircleLeft className="left-arrow" onClick={prevSlide} />
       <FaArrowAltCircleRight className="right-arrow" onClick={nextSlide} />
       {imageSliderData}
