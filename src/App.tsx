@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import imageData from "./json/image-content.json";
 import ImageSlider from "./components/ImageSlider";
 
