@@ -1,5 +1,5 @@
-import { KeyboardEvent, useState } from "react";
-import { FaArrowAltCircleRight, FaArrowAltCircleLeft } from "react-icons/fa";
+import React, { useState, useCallback, useEffect } from "react";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 interface ImageData {
   sliderData: {
@@ -12,7 +12,24 @@ const ImageSlider: React.FC<ImageData> = ({ sliderData }) => {
   const [current, setCurrent] = useState(0);
   const length = sliderData.length;
 
-  if (!Array.isArray(sliderData) || sliderData.length <= 0) return null;
+  const keyPress = useCallback(
+    (e) => {
+      if (e.key === "ArrowRight") {
+        setCurrent(current === length - 1 ? 0 : current + 1);
+      }
+      if (e.key === "ArrowLeft") {
+        setCurrent(current === 0 ? length - 1 : current - 1);
+      }
+    },
+    [current, length]
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyPress);
+    return () => {
+      document.removeEventListener("keydown", keyPress);
+    };
+  }, [keyPress]);
 
   const nextSlide = () => {
     setCurrent(current === length - 1 ? 0 : current + 1);
@@ -21,16 +38,7 @@ const ImageSlider: React.FC<ImageData> = ({ sliderData }) => {
     setCurrent(current === 0 ? length - 1 : current - 1);
   };
 
-  const handleKeyPress = (
-    e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    if (e.key === "ArrowRight") {
-      setCurrent(current === length - 1 ? 0 : current + 1);
-    }
-    if (e.key === "ArrowLeft") {
-      setCurrent(current === 0 ? length - 1 : current - 1);
-    }
-  };
+  if (!Array.isArray(sliderData) || sliderData.length <= 0) return null;
 
   const imageSliderData = sliderData.map((detail, idx) => {
     return (
@@ -42,9 +50,9 @@ const ImageSlider: React.FC<ImageData> = ({ sliderData }) => {
     );
   });
   return (
-    <section className="slider" onKeyDown={handleKeyPress} tabIndex="0">
-      <FaArrowAltCircleLeft className="left-arrow" onClick={prevSlide} />
-      <FaArrowAltCircleRight className="right-arrow" onClick={nextSlide} />
+    <section className="slider">
+      <FiChevronLeft className="left-arrow" onClick={prevSlide} />
+      <FiChevronRight className="right-arrow" onClick={nextSlide} />
       {imageSliderData}
     </section>
   );
